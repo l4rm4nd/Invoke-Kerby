@@ -1,4 +1,3 @@
-
 function Get-DomainSearcher {
 
     [OutputType('System.DirectoryServices.DirectorySearcher')]
@@ -162,7 +161,6 @@ function Get-DomainSearcher {
     }
 }
 
-
 function Convert-LDAPProperty {
 
     [OutputType('System.Management.Automation.PSCustomObject')]
@@ -226,7 +224,6 @@ function Convert-LDAPProperty {
     New-Object -TypeName PSObject -Property $ObjectProperties
 }
 
-
 function Get-NetDomain {
 
     [OutputType('System.DirectoryServices.ActiveDirectory.Domain')]
@@ -281,7 +278,6 @@ function Get-NetDomain {
         }
     }
 }
-
 
 function Get-SPNTicket {
 
@@ -388,7 +384,6 @@ function Get-SPNTicket {
         }
     }
 }
-
 
 function Invoke-Kerby {
 
